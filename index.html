@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Di chuyển đối tượng</title>
+
+</head>
+<body>
+<div id="interface" ></div>
+</body>
+<script>
+    const INTERFACE = document.getElementById('interface');
+
+    INTERFACE.style.width = 500 + 'px';
+    INTERFACE.style.height = 500 + 'px';
+
+    class Hero {
+        constructor(image, top, left, size, speed) {
+            this.image = image;
+            this.top = top;
+            this.left = left;
+            this.size = size;
+            this.speed = speed;
+        }
+
+        renderHero() {
+            let heroElement = `<img width='${this.size}'
+                            height='${this.size}'
+                            src='${this.image}'
+                            style='top:${this.top}px; left:${this.left}px; position:absolute;'/>`
+
+            return INTERFACE.innerHTML = heroElement;
+        }
+
+        moveUp() {
+            this.top -= this.speed;
+            this.checkBorderImpact();
+            this.renderHero();
+        }
+
+        moveDown() {
+            this.top += this.speed;
+            this.checkBorderImpact();
+            this.renderHero();
+        }
+
+        moveLeft() {
+            this.left -= this.speed;
+            this.checkBorderImpact();
+            this.renderHero();
+        }
+
+        moveRight() {
+            this.left += this.speed;
+            this.checkBorderImpact();
+            this.renderHero();
+        }
+
+        checkBorderImpact() {
+            let checkTop = this.top < 0;
+            let checkBottom = this.top + this.size > parseInt(INTERFACE.style.height);
+            let checkLeft = this.left < 0;
+            let checkRight = this.left + this.size > parseInt(INTERFACE.style.width);
+
+            if (checkTop) {
+                this.top = 0;
+            }
+            if (checkBottom) {
+                this.top = parseInt(INTERFACE.style.height) - this.size;
+            }
+            if (checkLeft) {
+                this.left = 0;
+            }
+            if (checkRight) {
+                this.left = parseInt(INTERFACE.style.width) - this.size;
+            }
+        }
+    }
+
+    let hero = new Hero('hero.jpg', 20, 20, 100, 10);
+    INTERFACE.innerHTML = hero.renderHero();
+
+    function heroMoveSelection(event) {
+        switch (event.keyCode) {
+            case 37:
+            case 65:
+                hero.moveLeft();
+                break;
+            case 38:
+            case 87:
+                hero.moveUp();
+                break;
+            case 39:
+            case 68:
+                hero.moveRight();
+                break;
+            case 40:
+            case 83:
+                hero.moveDown();
+                break;
+        }
+    }
+
+    document.addEventListener('keydown', heroMoveSelection);
+
+</script>
+</html>
